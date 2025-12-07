@@ -1,19 +1,35 @@
 # Minimal curated requirements for DL-Project-Equine-Pain
 # Note: For reproducible environments, generate this from your active venv with `pip freeze > requirements.txt`.
 
+# Core deep learning stack
 torch
 torchvision
 torchaudio
+
+# Data and numerics
 numpy
 pandas
+scipy
+
+# Classical ML / metrics
 scikit-learn
+
+# Image / video IO
 opencv-python
+Pillow
+
+# Detection (YOLOv8)
+ultralytics
+
+# Plotting and logging
 matplotlib
 seaborn
-tqdm
-ultralytics
 tensorboard
-Pillow
+
+# Utilities
+tqdm
+pyyaml
+
 
 # Optional / environment-specific
 # ffmpeg-python
