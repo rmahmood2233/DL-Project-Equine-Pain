@@ -1,0 +1,20 @@
+# Minimal curated requirements for DL-Project-Equine-Pain
+# Note: For reproducible environments, generate this from your active venv with `pip freeze > requirements.txt`.
+
+torch
+torchvision
+torchaudio
+numpy
+pandas
+scikit-learn
+opencv-python
+matplotlib
+seaborn
+tqdm
+ultralytics
+tensorboard
+Pillow
+
+# Optional / environment-specific
+# ffmpeg-python
+# yacs

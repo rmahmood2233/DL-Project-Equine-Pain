@@ -1,0 +1,45 @@
+__pycache__/
+*.py[cod]
+*.so
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual environments
+rife_env/
+sam_env/
+venv/
+.env/
+
+# Data and outputs (do not commit large files)
+dataset/
+outputs/
+
+# Models and checkpoints
+**/models/**
+**/checkpoints/**
+*.pth
+*.pt
+*.ckpt
+
+# Practical-RIFE, ffmpeg binaries
+Practical-RIFE/
+ffmpeg/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+LOG_PUSH_TO_GITHUB.md
+
+# Media files
+*.mp4
+*.avi
+
+# Notebook execution cache
+.ipynb_checkpoints/
+
+# Optional: include small CSVs of results if desired (uncomment)
+# outputs/csv/*.csv
