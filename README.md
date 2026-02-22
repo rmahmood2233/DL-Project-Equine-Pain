@@ -9,7 +9,7 @@ The project implements a complete end‑to‑end pipeline for **binary equine fa
 This project utilizes the dataset from the study: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0231608#sec021.
 ***
 
-## 1. Project overview
+## 1a. Project overview
 
 ### Goal
 
@@ -42,6 +42,92 @@ Develop a reproducible deep‑learning pipeline that:
 
 ***
 
+## 1b. Architecture Code
+```
+---
+config:
+  layout: dagre
+---
+flowchart TB
+ subgraph DATA["0. DATASET & VALIDATION"]
+        D2["Subject-wise 5-Fold Cross Validation"]
+        D1["EquiFACS Video Dataset <br> 12 Horses"]
+  end
+ subgraph INPUT["1. INPUT PIPELINE"]
+        C["16-Frame Clip Generator"]
+        S["Frame Extraction <br> 7–10 FPS"]
+        V["Raw Facial Video <br> 30–90 sec"]
+  end
+ subgraph DETECTION["2. ROI DETECTION (YOLOv8)"]
+        CH["Chin ROI ⭐ (Best Region)"]
+        N["Nostril ROI"]
+        E2["Right Eye ROI"]
+        E1["Left Eye ROI"]
+        Y["YOLOv8 Detector <br> mAP@50 = 0.923"]
+  end
+ subgraph I3D_STAGE["3. SPATIOTEMPORAL FEATURE EXTRACTION (I3D)"]
+        I_CH["I3D Stream - Chin"]
+        I_N["I3D Stream - Nostril"]
+        I_E2["I3D Stream - R Eye"]
+        I_E1["I3D Stream - L Eye"]
+  end
+ subgraph FUSION["4. FEATURE FUSION"]
+        CONCAT["Feature Concatenation"]
+  end
+ subgraph TEMPORAL["5. TEMPORAL MODELING"]
+        ATT1["With Temporal Attention ⭐ <br> F1 = 0.687"]
+        ATT0["Without Attention <br> F1 = 0.623"]
+        HSIZE["Hidden Size Ablation <br> 128 | 256 ⭐ | 512"]
+        B2["Bi-LSTM (2 Layers) ⭐ <br> F1 = 0.687"]
+        B1["Bi-LSTM (1 Layer) <br> F1 = 0.652"]
+  end
+ subgraph CLASSIFIER["6. CLASSIFICATION"]
+        OUT["Pain Level <br> Mild | Moderate"]
+        SM["Softmax"]
+        FC["Fully Connected Layer"]
+  end
+ subgraph EXPLAIN["7. INTERPRETABILITY"]
+        GCAM["Grad-CAM on ROI"]
+        ATTMAP["Temporal Attention Weights"]
+  end
+ subgraph DEPLOY["8. CLINICAL DEPLOYMENT"]
+        RT["Real-Time Monitoring System"]
+        EDGE["Model Quantization & Pruning"]
+  end
+    D1 --> D2
+    V --> S
+    S --> C
+    Y --> E1 & E2 & N & CH
+    D2 --> V
+    C --> Y
+    E1 --> I_E1
+    E2 --> I_E2
+    N --> I_N
+    CH --> I_CH
+    I_E1 --> CONCAT
+    I_E2 --> CONCAT
+    I_N --> CONCAT
+    I_CH --> CONCAT & B2 & GCAM
+    CONCAT --> B1
+    B1 --> B2
+    B2 --> ATT0 & HSIZE
+    ATT0 --> ATT1
+    ATT1 --> FC & ATTMAP
+    FC --> SM
+    SM --> OUT
+    OUT --> EDGE
+    EDGE --> RT
+
+    style Y fill:#1a73e8,color:#fff
+    style I_CH fill:#34a853,color:#fff
+    style B2 fill:#1a73e8,color:#fff
+    style ATT1 fill:#fbbc04,color:#000
+    style OUT fill:#ea4335,color:#fff
+    style DATA fill:#f8f9fa,stroke:#3c4043,stroke-dasharray: 5 5
+    style DETECTION fill:#f8f9fa,stroke:#3c4043,stroke-dasharray: 5 5
+    style I3D_STAGE fill:#f8f9fa,stroke:#3c4043,stroke-dasharray: 5 5
+    style TEMPORAL fill:#f8f9fa,stroke:#3c4043,stroke-dasharray: 5 5
+```
 ## 2. Repository structure
 
 Adapt paths if you use a different layout.
