@@ -6,6 +6,7 @@ This repository contains the source code for the project:
 
 The project implements a complete end‑to‑end pipeline for **binary equine facial pain recognition (Mild vs Moderate)** using region‑aware preprocessing, 3D CNNs (I3D / R3D‑18), and Bi‑LSTM temporal modeling on a small, imbalanced dataset of 12 horses.[1][2]
 
+This project utilizes the dataset from the study: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0231608#sec021.
 ***
 
 ## 1. Project overview
